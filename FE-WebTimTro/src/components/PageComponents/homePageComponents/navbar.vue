@@ -39,34 +39,141 @@
       </ul>
       <!-- Đưa các nút Đăng nhập và Đăng ký hoàn toàn về cuối -->
       <div class="ml-auto d-flex">
-        <button class="btn btn-outline-primary mr-2" @click="toLoginPage">
+        <div class="dropdown" v-if="hasToken">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Hi {{ userInfo.userName }}
+          </button>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="dropdownMenuButton1"
+          >
+            <li><a class="dropdown-item" href="#">Thông tin</a></li>
+            <li>
+              <a
+                class="dropdown-item"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                href="#"
+                >Đăng xuất</a
+              >
+            </li>
+          </ul>
+        </div>
+        <button
+          class="btn btn-outline-primary mr-2"
+          v-else
+          @click="toLoginPage"
+        >
           Đăng nhập
         </button>
-        <button class="btn btn-outline-primary mr-2" @click="toRegisterPage">
-          Đăng ký
-        </button>
+      </div>
+      <!-- model -->
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Đăng Xuất</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">Bạn có muốn đăng xuất không?</div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-success"
+                data-bs-dismiss="modal"
+                @click="toLoginPage"
+              >
+                Đồng ý
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+              >
+                Huỷ
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
 </template>
-
-
   
-  <script>
+
+<script>
+import axios from "axios";
 export default {
   name: "Navbar",
+  data() {
+    return {
+      userInfo: {},
+    };
+  },
+  mounted() {
+    this.getUserInfo();
+  },
   methods: {
+    toLoginPage() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
+    },
     toTorenPage() {
       this.$router.push("/search");
     },
-    toHomePage() {
-      window.location.reload();
+    async getUserInfo() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await axios.get("http://localhost:8081/get-infor", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          console.log(response);
+          this.userInfo = response.data;
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+        }
+      }
     },
-    toLoginPage() {
-      this.$router.push("/login");
+  },
+
+  computed: {
+    hasToken() {
+      if (localStorage.getItem("token")) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    noToken() {
+      if (localStorage.getItem("token")) {
+        return false;
+      } else {
+        return true;
+      }
     },
   },
 };
 </script>
-  
+
+
  

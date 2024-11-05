@@ -43,8 +43,7 @@
               <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
-                  <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
                     <div class="p-5">
                       <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">Đăng Nhập</h1>
@@ -138,7 +137,7 @@
   </div>
 </template>
   
-  <script>
+<script>
 import axios from "axios";
 export default {
   name: "Login",
@@ -151,15 +150,26 @@ export default {
     };
   },
   methods: {
-    async handleLogin() {
+    handleLogin() {
       const data = {
         userName: this.userName,
         password: this.password,
       };
-      console.log(data)
-      const response = await axios.post('http://localhost:8081/login', data);
-      console.log(response)
-      
+
+      axios
+        .post("http://localhost:8081/login", data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          localStorage.setItem("token", response.data);
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          this.errorMessage = error.response.data;
+          this.showModal = true;
+        });
     },
     closeModal() {
       this.showModal = false;

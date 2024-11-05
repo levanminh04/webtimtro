@@ -19,7 +19,11 @@
           <a class="nav-link" @click="toTorenPage">Tìm thuê</a>
         </li>
         <li class="nav-item ml-2">
-          <a class="nav-link" href="./lienhe.html">Liên hệ</a>
+          <a
+            class="nav-link"
+            href="https://www.facebook.com/profile.php?id=100017121455155"
+            >Liên hệ</a
+          >
         </li>
         <li class="nav-item ml-2">
           <a class="nav-link"><i class="far fa-heart"></i></a>
@@ -42,7 +46,11 @@ export default {
   name: "Navbar",
   methods: {
     toHomePage() {
+      window.location.reload();
       window.location.href = "/";
+    },
+    toTorenPage() {
+      window.location.reload();
     },
   },
 };

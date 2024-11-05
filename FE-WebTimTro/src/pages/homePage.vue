@@ -19,41 +19,27 @@
   <!-- END BANNER HOME SEARCH -->
 
   <!-- REVIEW WARD -->
-  <div class="row">
+  <div class="col-12">
     <div class="container">
+      <!-- REVIEW WARD -->
       <area-review />
-    </div>
-  </div>
-  <!-- END REVIEW WARD -->
+      <!-- END REVIEW WARD -->
 
-  <!-- PROPERTI LIST -->
-  <div class="row">
-    <div class="container">
+      <!-- PROPERTY LIST -->
       <cls-property-listing />
-    </div>
-  </div>
-  <!-- END PROPERTI LIST -->
+      <!-- END PROPERTY LIST -->
 
-  <!-- BANNER CONTENT -->
-  <div class="row">
-    <div class="container">
+      <!-- BANNER CONTENT -->
       <cls-banner />
-    </div>
-  </div>
-  <!-- END BANNER CONTENT -->
+      <!-- END BANNER CONTENT -->
 
-  <!-- PROPERTI LIST -->
-  <div class="row">
-    <div class="container">
+      <!-- PROPERTY LIST -->
       <cls-property-listing />
+      <!-- END PROPERTY LIST -->
     </div>
   </div>
-  <!-- END PROPERTI LIST -->
-
   <!-- FOOTER -->
-  <div class="row">
-    <cls-footer />
-  </div>
+  <cls-footer />
   <!-- END FOOTER -->
 </template>
   

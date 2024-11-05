@@ -14,12 +14,16 @@
           <span>Trang chủ</span>
         </li>
       </ul>
-      <ul class="navbar-nav ml-auto menu-top">
+      <ul class="navbar-nav menu-top">
         <li class="nav-item ml-2">
           <a class="nav-link" @click="toTorenPage">Tìm thuê</a>
         </li>
         <li class="nav-item ml-2">
-          <a class="nav-link" href="./lienhe.html">Liên hệ</a>
+          <a
+            class="nav-link"
+            href="https://www.facebook.com/profile.php?id=100017121455155"
+            >Liên hệ</a
+          >
         </li>
         <li class="nav-item ml-2">
           <a class="nav-link"><i class="far fa-heart"></i></a>
@@ -33,9 +37,20 @@
           </button>
         </li>
       </ul>
+      <!-- Đưa các nút Đăng nhập và Đăng ký hoàn toàn về cuối -->
+      <div class="ml-auto d-flex">
+        <button class="btn btn-outline-primary mr-2" @click="toLoginPage">
+          Đăng nhập
+        </button>
+        <button class="btn btn-outline-primary mr-2" @click="toRegisterPage">
+          Đăng ký
+        </button>
+      </div>
     </div>
   </nav>
 </template>
+
+
   
   <script>
 export default {
@@ -46,6 +61,9 @@ export default {
     },
     toHomePage() {
       window.location.reload();
+    },
+    toLoginPage() {
+      this.$router.push("/login");
     },
   },
 };

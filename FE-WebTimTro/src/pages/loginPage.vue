@@ -119,7 +119,10 @@
                         >
                       </div>
                       <div class="text-center">
-                        <a class="small" @click="toRegisterPage"
+                        <a
+                          class="small"
+                          style="cursor: pointer"
+                          @click="toRegisterPage"
                           >Tạo Tài Khoản Mới!</a
                         >
                       </div>
@@ -148,26 +151,15 @@ export default {
     };
   },
   methods: {
-    handleLogin() {
+    async handleLogin() {
       const data = {
         userName: this.userName,
         password: this.password,
       };
-
-      axios
-        .post("http://localhost:8081/login", data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          localStorage.setItem("token", response.data);
-          this.$router.push("/");
-        })
-        .catch((error) => {
-          this.errorMessage = error.response.data;
-          this.showModal = true;
-        });
+      console.log(data)
+      const response = await axios.post('http://localhost:8081/login', data);
+      console.log(response)
+      
     },
     closeModal() {
       this.showModal = false;
@@ -187,15 +179,15 @@ export default {
   
   <style scoped>
 .bg-gradient-primary {
-  background-color: #363d50ff;
+  background-color: #641e1eff;
   background-image: #000000;
   background-size: contain;
 }
 
 .bg-login-image {
-  background: url(https://daotao.ptit.edu.vn/);
+  background: url("/img/buildingLogo.jpg");
   background-position: center;
-  background-size: auto;
+  background-size: contain;
 }
 
 html,

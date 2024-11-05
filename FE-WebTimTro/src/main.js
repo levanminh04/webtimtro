@@ -9,6 +9,11 @@ import 'slick-carousel/slick/slick-theme.css';
 import '@/assets/css/bootstrap.min.css'
 import '@/assets/css/style.css';
 import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+// import '@/assets/css/loginStyle.css'
+
+
 import router from './router'
 
 const app = createApp(App)

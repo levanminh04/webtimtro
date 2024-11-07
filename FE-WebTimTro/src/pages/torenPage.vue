@@ -1,7 +1,13 @@
 <template>
   <!-- NAVBAR -->
-  <cls-navbar />
-  <cls-navbarmobile />
+  <div class="hpc-navbar">
+    <div class="container">
+      <div class="row">
+        <cls-navbar />
+        <cls-navbarmobile />
+      </div>
+    </div>
+  </div>
 
   <!-- SEARCH NAVBAR -->
   <cls-search-navbar />

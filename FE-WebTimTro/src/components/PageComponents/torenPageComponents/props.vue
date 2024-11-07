@@ -6,7 +6,9 @@
       </div>
       <div class="prop-info">
         <h2 class="prop-title">
-          <a class="link-overlay" :href="property.link">{{ property.title }}</a>
+          <a class="link-overlay" @click="toArticlePage">{{
+            property.title
+          }}</a>
         </h2>
         <div class="prop-addr">{{ property.address }}</div>
         <ul class="prop-attr">
@@ -72,13 +74,14 @@ export default {
           phone: "0964341***",
           link: "./article.html",
         },
-        // Thêm các bất động sản khác...
       ],
     };
+  },
+  methods: {
+    toArticlePage() {
+      this.$router.push("/article");
+    },
   },
 };
 </script>
 
-<style scoped>
-/* Bạn có thể thêm CSS tại đây nếu cần */
-</style>

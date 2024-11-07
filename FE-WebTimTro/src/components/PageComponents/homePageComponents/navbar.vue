@@ -131,6 +131,9 @@ export default {
     this.getUserInfo();
   },
   methods: {
+    toHomePage() {
+      window.location.reload();
+    },
     toLoginPage() {
       localStorage.removeItem("token");
       this.$router.push("/login");

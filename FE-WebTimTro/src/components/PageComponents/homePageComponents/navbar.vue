@@ -32,7 +32,11 @@
           <a class="nav-link"><i class="far fa-bell"></i></a>
         </li>
         <li class="nav-item ml-2">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          <button
+            class="btn btn-outline-success my-2 my-sm-0"
+            type="submit"
+            @click="toPostPage"
+          >
             Đăng tin
           </button>
         </li>
@@ -53,7 +57,11 @@
             class="dropdown-menu dropdown-menu-end"
             aria-labelledby="dropdownMenuButton1"
           >
-            <li><a class="dropdown-item" href="#">Thông tin</a></li>
+            <li>
+              <a class="dropdown-item" href="#" @click="toUserPage"
+                >Thông tin</a
+              >
+            </li>
             <li>
               <a
                 class="dropdown-item"
@@ -133,6 +141,7 @@ export default {
   methods: {
     toHomePage() {
       window.location.reload();
+      this.$router.push("/");
     },
     toLoginPage() {
       localStorage.removeItem("token");
@@ -140,6 +149,12 @@ export default {
     },
     toTorenPage() {
       this.$router.push("/search");
+    },
+    toUserPage() {
+      this.$router.push("/account/thong-tin-ca-nhan");
+    },
+    toPostPage() {
+      this.$router.push("/postMotel");
     },
     async getUserInfo() {
       const token = localStorage.getItem("token");
@@ -150,7 +165,7 @@ export default {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response);
+          console.log(response.data);
           this.userInfo = response.data;
         } catch (error) {
           console.error("Error fetching user info:", error);

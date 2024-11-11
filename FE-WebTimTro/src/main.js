@@ -10,7 +10,7 @@ import 'slick-carousel/slick/slick.min.js';
 import 'slick-carousel/slick/slick-theme.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.js'
-
+// import '@/assets/data/locations.js';
 
 
 import router from './router'
@@ -18,5 +18,5 @@ import router from './router'
 const app = createApp(App)
 // app.use(BootstrapVue3);
 app.use(router);
-app.use(bootstrap);
+// app.use(bootstrap);
 app.mount('#app');

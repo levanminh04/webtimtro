@@ -116,46 +116,6 @@
   <script>
 export default {
   name: "Article",
-  methods: {
-    initSlicker() {
-      $("#gallery").slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-        dots: true,
-        infinite: true,
-      });
-    },
-    similarUrlSlide() {
-      $("#SimilarUrlSlide").slick({
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-        dots: false,
-        infinite: true,
-        responsive: [
-          {
-            breakpoint: 990,
-            settings: {
-              slidesToShow: 3,
-            },
-          },
-          {
-            breakpoint: 630,
-            settings: {
-              slidesToShow: 2,
-            },
-          },
-        ],
-      });
-    },
-  },
-  mounted() {
-    this.initSlicker();
-    this.similarUrlSlide();
-  },
 };
 </script>
   

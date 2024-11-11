@@ -13,7 +13,7 @@
   <cls-search-navbar />
 
   <!-- BREADCRUMB -->
-  <cls-breadcrumb />
+  <!-- <cls-breadcrumb /> -->
 
   <!-- PAGE CONTENT -->
   <div class="mg-page-content">
@@ -22,7 +22,7 @@
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
           <div id="page-header">
             <h1 class="page-title">
-              Thuê phòng trọ 2020 giá rẻ tại Việt Nam, giá thuê mới nhất
+              Thuê phòng trọ 2024 giá rẻ tại Việt Nam, giá thuê mới nhất
             </h1>
           </div>
           <div class="property-list">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-          <cls-banner-widget />
+          <!-- <cls-banner-widget /> -->
           <cls-kinds-of-house />
           <cls-city-area />
         </div>
@@ -44,32 +44,32 @@
 </template>
   
   <script>
-import bannerWidget from "@/assets/toren_components/bannerWidget.vue";
-import breadcrumb from "@/assets/toren_components/breadcrumb.vue";
-import cityArea from "@/assets/toren_components/cityArea.vue";
-import kindsOfHouse from "@/components/PageComponents/torenPageComponents/kindsOfHouse.vue";
-import pagination from "@/components/PageComponents/torenPageComponents/pagination.vue";
-import props from "@/components/PageComponents/torenPageComponents/props.vue";
-import resultList from "@/components/PageComponents/torenPageComponents/resultList.vue";
-import searchNavbar from "@/assets/toren_components/searchNavbar.vue";
-import navbarMobile from "@/components/PageComponents/homePageComponents/navbarMobile.vue";
-import navbarToren from "@/components/PageComponents/torenPageComponents/navbarToren.vue";
-import footer from "@/components/PageComponents/homePageComponents/footer.vue";
+import Footer from "@/components/PageComponents/homePageComponents/footer.vue";
+import navbarMobileVue from "@/components/PageComponents/homePageComponents/navbarMobile.vue";
+import BannerWidget from "@/components/PageComponents/torenPageComponents/bannerWidget.vue";
+import Breadcrumb from "@/components/PageComponents/torenPageComponents/breadcrumb.vue";
+import CityArea from "@/components/PageComponents/torenPageComponents/cityArea.vue";
+import KindsOfHouse from "@/components/PageComponents/torenPageComponents/kindsOfHouse.vue";
+import NavbarToren from "@/components/PageComponents/torenPageComponents/navbarToren.vue";
+import Pagination from "@/components/PageComponents/torenPageComponents/pagination.vue";
+import Props from "@/components/PageComponents/torenPageComponents/props.vue";
+import ResultList from "@/components/PageComponents/torenPageComponents/resultList.vue";
+import SearchNavbar from "@/components/PageComponents/torenPageComponents/searchNavbar.vue";
 
 export default {
   name: "torenPage",
   components: {
-    clsFooter: footer,
-    clsNavbar: navbarToren,
-    clsNavbarmobile: navbarMobile,
-    clsSearchNavbar: searchNavbar,
-    clsBreadcrumb: breadcrumb,
-    clsResultList: resultList,
-    clsProps: props,
-    clsPagination: pagination,
-    clsBannerWidget: bannerWidget,
-    clsKindsOfHouse: kindsOfHouse,
-    clsCityArea: cityArea,
+    clsFooter: Footer,
+    clsNavbar: NavbarToren,
+    clsNavbarmobile: navbarMobileVue,
+    clsSearchNavbar: SearchNavbar,
+    clsBreadcrumb: Breadcrumb,
+    clsResultList: ResultList,
+    clsProps: Props,
+    clsPagination: Pagination,
+    clsBannerWidget: BannerWidget,
+    clsKindsOfHouse: KindsOfHouse,
+    clsCityArea: CityArea,
   },
   data() {
     return {

@@ -30,31 +30,50 @@
     <div class="container">
       <div class="row">
         <div class="col-6 col-sm-3">
-          <select class="form-select mb-3" v-model="province">
-            <option disabled selected value="">Tỉnh/Thành Phố</option>
-            <option value="Hà Nội">Hà Nội</option>
-            <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-            <option value="Hà Nam">Hà Nam</option>
+          <select
+            class="form-select mb-3"
+            v-model="province"
+            @change="onProvinceChange"
+          >
+            <option value="" selected>Chọn tỉnh thành</option>
+
+            <option
+              v-for="province in provinces"
+              :key="province.code"
+              :value="province.code"
+            >
+              {{ province.name }}
+            </option>
           </select>
         </div>
         <div class="col-6 col-sm-3">
           <select
             class="form-select mb-3"
             v-model="district"
-            aria-label="Default select example"
+            @change="onDistrictChange"
+            :disabled="!districts.length"
           >
-            <option value="" disabled selected>Quận/huyện</option>
-            <option value="Hà Đông">Hà Đông</option>
-            <option value="Ba Đình">Ba Đình</option>
-            <option value="Hoàn Kiếm">Hoàn Kiếm</option>
+            <option value="" disabled selected>Chọn quận huyện</option>
+            <option
+              v-for="district in districts"
+              :key="district.code"
+              :value="district.code"
+            >
+              {{ district.name }}
+            </option>
           </select>
         </div>
         <div class="col-6 col-sm-3">
-          <select class="form-select mb-3" v-model="ward">
-            <option disabled selected value="">Phường/xã</option>
-            <option value="Phú La">Phú La</option>
-            <option value="La Khê">La Khê</option>
-            <option value="Yên Nghĩa">Yên Nghĩa</option>
+          <select
+            class="form-select mb-3"
+            v-model="ward"
+            @change="onWardChange"
+            :disabled="!wards.length"
+          >
+            <option selected value="">Chọn phường xã</option>
+            <option v-for="ward in wards" :key="ward.code" :value="ward.code">
+              {{ ward.name }}
+            </option>
           </select>
         </div>
         <div class="col-6 col-sm-3">
@@ -163,6 +182,9 @@ import axios from "axios";
 export default {
   data() {
     return {
+      provinces: [],
+      districts: [],
+      wards: [],
       title: null,
       type: null,
       houseNumber: null,
@@ -177,15 +199,97 @@ export default {
       price: null,
     };
   },
+  created() {
+    this.fetchCities();
+  },
   methods: {
+    async fetchCities() {
+      try {
+        const response = await axios.get(
+          "https://provinces.open-api.vn/api/?depth=1"
+        );
+        this.provinces = response.data;
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    },
+    async onProvinceChange() {
+      this.district = "";
+      this.ward = "";
+      this.wards = [];
+      if (this.province) {
+        try {
+          const response = await axios.get(
+            `https://provinces.open-api.vn/api/p/${this.province}?depth=2`
+          );
+          this.districts = response.data.districts;
+        } catch (error) {
+          console.error("Error fetching districts:", error);
+        }
+      } else {
+        this.districts = [];
+      }
+      for (let item in this.provinces) {
+        if (item.code == this.province) {
+          this.province = item.name;
+        }
+      }
+      console.log(this.province);
+    },
+    async onDistrictChange() {
+      this.ward = "";
+      if (this.district) {
+        try {
+          const response = await axios.get(
+            `https://provinces.open-api.vn/api/d/${this.district}?depth=2`
+          );
+          this.wards = response.data.wards;
+        } catch (error) {
+          console.error("Error fetching wards:", error);
+        }
+      } else {
+        this.wards = [];
+      }
+      for (let item in this.districts) {
+        if (item.code == this.district) {
+          this.district = item.name;
+        }
+      }
+    },
+
     async submitForm() {
       const formData = new FormData();
+      for (let item of this.provinces) {
+        if (item.code == this.province) {
+          formData.append("province", item.name);
+          break;
+        }
+      }
+
+      // Lấy tên quận/huyện từ `districts`
+      for (let item of this.districts) {
+        if (item.code == this.district) {
+          formData.append("district", item.name);
+          break;
+        }
+      }
+
+      // Lấy tên phường/xã từ `wards`
+      for (let item of this.wards) {
+        if (item.code == this.ward) {
+          formData.append("ward", item.name);
+          break;
+        }
+      }
+
       formData.append("title", this.title);
+      // formData.append("province", this.province);
       formData.append("maxPeople", this.maxPeople);
       formData.append("houseNumber", this.houseNumber);
       formData.append("street", this.street);
-      formData.append("district", this.district);
-      formData.append("ward", this.ward);
+      // formData.append("ward", this.ward);
+      // formData.append("district", this.district);
       formData.append("area", this.area);
       formData.append("price", this.price);
       formData.append("interior", this.interior);

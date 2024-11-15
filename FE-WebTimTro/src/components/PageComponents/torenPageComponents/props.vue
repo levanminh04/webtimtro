@@ -1,6 +1,10 @@
 <template>
   <ul class="props">
-    <li v-for="(motel, index) in motels" :key="index">
+    <li
+      v-for="(motel, index) in motels"
+      :key="index"
+      style="background-color: #f3ebebc0"
+    >
       <div class="prop-img">
         <img
           v-if="motel.filesDTO && motel.filesDTO.length > 0"

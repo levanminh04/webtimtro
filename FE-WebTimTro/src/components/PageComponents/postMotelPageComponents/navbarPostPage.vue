@@ -152,7 +152,7 @@ export default {
       const token = localStorage.getItem("token");
       if (token) {
         try {
-          const response = await axios.get("http://localhost:8081/get-infor", {
+          const response = await axios.get("http://localhost:8081/get-info", {
             headers: {
               Authorization: `Bearer ${token}`,
             },

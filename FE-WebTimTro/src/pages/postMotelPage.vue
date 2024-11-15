@@ -1,29 +1,30 @@
 <template>
-  <!-- NAVBAR -->
-  <div class="hpc-navbar">
-    <div class="container">
-      <div class="row">
-        <cls-navbar />
-        <cls-navbarmobile />
+  <div>
+    <!-- NAVBAR -->
+    <div class="hpc-navbar">
+      <div class="container">
+        <div class="row">
+          <cls-navbar />
+          <cls-navbarmobile />
+        </div>
       </div>
     </div>
-  </div>
-  <!-- END NAVBAR -->
+    <!-- END NAVBAR -->
 
-  <!-- REVIEW WARD -->
-  <div class="col-12">
-    <div class="container">
-      <div class="widget">
-        <form-post></form-post>
+    <!-- REVIEW WARD -->
+    <div class="col-12">
+      <div class="container">
+        <div class="widget">
+          <form-post></form-post>
+        </div>
       </div>
     </div>
+    <!-- FOOTER -->
+    <div class="card-footer">
+      <cls-footer />
+    </div>
+    <!-- END FOOTER -->
   </div>
-  <!-- FOOTER -->
-  <div class="card-footer">
-    <cls-footer />
-  </div>
-
-  <!-- END FOOTER -->
 </template>
 
 <script>

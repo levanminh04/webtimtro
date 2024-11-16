@@ -11,7 +11,7 @@
         placeholder="Nhập Tên Toà Nhà"
         v-model="title"
       />
-      <label for="title">Nhập Tên Toà Nhà</label>
+      <label for="title">Nhập tiêu đề</label>
     </div>
 
     <!-- Số nhà -->

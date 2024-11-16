@@ -25,7 +25,7 @@ public class MotelRepositoryCustomImpl implements MotelRepositoryCustom {
                 field.setAccessible(true);
                 String fieldName = field.getName();
                 Object value = field.get(motelSearchBuilder);
-                if(!fieldName.startsWith("area") && !fieldName.startsWith("price") && !fieldName.equals("page") && !fieldName.equals("maxPageItems")){
+                if(!fieldName.startsWith("area") && !fieldName.startsWith("price") && !fieldName.startsWith("key")){
                     if(NumberUtils.isNumber(value)) {
                         sql.append(" and m." + fieldName + " = " + value + " ");
                     }
@@ -39,7 +39,18 @@ public class MotelRepositoryCustomImpl implements MotelRepositoryCustom {
             e.printStackTrace();
         }
     }
+    public void keywordQuery(StringBuilder sql, MotelSearchBuilder motelSearchBuilder){
+        String keyword = motelSearchBuilder.getKeyword();
+        if (keyword != null && !keyword.isEmpty()) {
+            sql.append(" and (m.title like '%" + keyword + "%' ");
+            sql.append(" or m.ward like '%" + keyword + "%' ");
+            sql.append(" or m.street like '%" + keyword + "%' ");
+            sql.append(" or m.interior like '%" + keyword + "%' ");
+            sql.append(" or m.district like '%" + keyword + "%' ");
+            sql.append(" or m.province like '%" + keyword + "%') ");
+        }
 
+    }
     public void querySpecial(StringBuilder sql, MotelSearchBuilder motelSearchBuilder){
         Integer priceFrom = motelSearchBuilder.getPriceFrom();
         Integer priceTo = motelSearchBuilder.getPriceTo();
@@ -63,24 +74,16 @@ public class MotelRepositoryCustomImpl implements MotelRepositoryCustom {
         }
     }
 
-    public void pagination(StringBuilder sql, Pageable pageable){
-        sql.append(" limit " + pageable.getPageSize() + " offset " + pageable.getOffset());
-    }
-
-    public void considerStatus(StringBuilder sql){
-        sql.append(" and m.status = 1 ");
-    }
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public List<MotelEntity> searchByMotelSearchBuilder(MotelSearchBuilder motelSearchBuilder, Pageable pageable) {
+    public List<MotelEntity> searchByMotelSearchBuilder(MotelSearchBuilder motelSearchBuilder) {
         StringBuilder sql = new StringBuilder(" select m.* from motel m ");
         queryNormal(sql, motelSearchBuilder);
         querySpecial(sql, motelSearchBuilder);
-        considerStatus(sql);
-        pagination(sql, pageable);
+        keywordQuery(sql, motelSearchBuilder);
         Query query = entityManager.createNativeQuery(sql.toString(), MotelEntity.class);
         return query.getResultList();
     }

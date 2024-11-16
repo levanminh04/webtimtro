@@ -3,16 +3,18 @@ package com.example.WebTimTroBA.Model.Search;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Bean;
 
 @Setter
 @Getter
 public class MotelSearchBuilder {
 
-    private String description;
+
+    private String keyword;
 
     private Integer houseNumber;
 
-    private  String ward;
+    private String ward;
 
     private String district;
 
@@ -24,20 +26,10 @@ public class MotelSearchBuilder {
 
     private Integer priceFrom;
 
-    private Integer priceTo;
-
     private String interior;
 
+    private Integer priceTo;
+
     private String type;
-
-    private String detailDescription;
-
-    private String managerName;
-
-    private String phoneNumber;
-
-    private Integer page = 1;
-
-    private Integer maxPageItems = 10;
 
 }

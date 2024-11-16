@@ -41,8 +41,8 @@ public class MotelResponseConverter {
             }
             motelResponse.setFilesDTO(filesDTO);
             motelResponse.setOwner(ownerResponseConverter.toOwnerResponse(motelEntity.getUser()));
-            motelResponse.setAddress("số " + motelEntity.getHouseNumber() + ", đường " + motelEntity.getStreet() + ", phường "
-                                        + motelEntity.getWard() + ", quận " + motelEntity.getDistrict() + ", thành phố " + motelEntity.getProvince());
+            motelResponse.setAddress("Số " + motelEntity.getHouseNumber() + ", " + motelEntity.getStreet() + ", "
+                                        + motelEntity.getWard() + ", " + motelEntity.getDistrict() + ", " + motelEntity.getProvince());
             if(motelEntity.getStatus() == 1){
                 motelResponse.setStatus("đã duyệt");
             }

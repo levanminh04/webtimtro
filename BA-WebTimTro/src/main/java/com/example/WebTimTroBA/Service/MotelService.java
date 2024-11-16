@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 public interface MotelService {
-    List<MotelResponse> findAll(MotelSearchBuilder motelSearchBuilder) throws MalformedURLException;
+    List<MotelResponse> findByParam(MotelSearchBuilder motelSearchBuilder) throws MalformedURLException;
     void save(MotelDTO motelDTO, String token) throws IOException;
     List<MotelResponse> findAll() throws MalformedURLException;
     void markById(Integer Id);

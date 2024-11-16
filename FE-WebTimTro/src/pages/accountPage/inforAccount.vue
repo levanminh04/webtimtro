@@ -13,11 +13,8 @@
       <!-- Sidebar -->
       <div class="widget" style="background-color: #ecececc4">
         <ul class="list-group">
-          <li class="list-group-item active">Thông tin cá nhân</li>
-          <li class="list-group-item" style="cursor: pointer">
-            Thông tin tài khoản
-          </li>
-          <li class="list-group-item" style="cursor: pointer">Trợ đã lưu</li>
+          <li class="list-group-item active">Thông tin Tài Khoản</li>
+          <li class="list-group-item" style="cursor: pointer">Quản lý trọ đã đăng</li>
           <li class="list-group-item" style="cursor: pointer">Thông báo</li>
           <li class="list-group-item" style="cursor: pointer">
             Quản lý đánh giá trợ
@@ -29,7 +26,7 @@
     <div class="col-md-8">
       <!-- Main Content -->
       <div class="widget" style="background-color: #ecececc4">
-        <h3 class="mb-4">THÔNG TIN CÁ NHÂN</h3>
+        <h3 class="mb-4">THÔNG TIN TÀI KHOẢN</h3>
         <p>
           Cập nhật thông tin của bạn và tìm hiểu các thông tin này được sử dụng
           ra sao.
@@ -42,41 +39,16 @@
               type="text"
               v-model="name"
               class="form-control"
-              placeholder="Tuấn Nguyễn Quốc"
+              placeholder="Nhập Tên"
             />
           </div>
-
           <div class="mb-3">
-            <label class="form-label">Giới tính</label>
-            <select v-model="gender" class="form-select">
-              <option value="Nam">Nam</option>
-              <option value="Nữ">Nữ</option>
-              <option value="Khác"></option>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Ngày sinh</label>
-            <input type="date" v-model="birthdate" class="form-control" />
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Mã số CCCD</label>
+            <label class="form-label">Số Điện Thoại</label>
             <input
               type="text"
-              v-model="idNumber"
+              v-model="phoneNumber"
               class="form-control"
-              placeholder="Nhập mã số CCCD"
-            />
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Địa chỉ</label>
-            <input
-              type="text"
-              v-model="address"
-              class="form-control"
-              placeholder="Nhập địa chỉ"
+              placeholder="Nhập SĐT"
             />
           </div>
 
@@ -99,6 +71,7 @@ export default {
     const name = ref("Tuấn Nguyễn Quốc");
     const gender = ref("Nam");
     const birthdate = ref("");
+    const phoneNumber = ref("0388112760");
     const idNumber = ref("");
     const address = ref("");
 

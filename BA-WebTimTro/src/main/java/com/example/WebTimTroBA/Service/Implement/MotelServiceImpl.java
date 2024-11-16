@@ -40,9 +40,8 @@ public class MotelServiceImpl implements MotelService {
     private final JwtTokenUtils jwtTokenUtils;
 
     @Override
-    public List<MotelResponse> findAll(MotelSearchBuilder motelSearchBuilder) throws MalformedURLException {
-        Pageable pageable = PageRequest.of(motelSearchBuilder.getPage()-1, motelSearchBuilder.getMaxPageItems() + 10);
-        List<MotelEntity> motelEntities = motelRepository.searchByMotelSearchBuilder(motelSearchBuilder, pageable);
+    public List<MotelResponse> findByParam(MotelSearchBuilder motelSearchBuilder) throws MalformedURLException {
+        List<MotelEntity> motelEntities = motelRepository.searchByMotelSearchBuilder(motelSearchBuilder);
         return motelResponseConverter.toMotelResponse(motelEntities);
     }
 

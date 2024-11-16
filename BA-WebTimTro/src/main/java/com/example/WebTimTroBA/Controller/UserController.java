@@ -1,5 +1,6 @@
 package com.example.WebTimTroBA.Controller;
 
+import com.example.WebTimTroBA.Converter.SearchConverter;
 import com.example.WebTimTroBA.CustomException.NotNullException;
 import com.example.WebTimTroBA.Model.DTO.MotelDTO;
 import com.example.WebTimTroBA.Model.DTO.UserDTO;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
@@ -27,17 +29,19 @@ public class UserController {
     private final MotelService motelService;
     private final UserService userService;
     private final JwtTokenUtils jwtTokenUtils;
+    private final SearchConverter searchConverter;
 
-    @GetMapping("/")
-    public ResponseEntity<Object>searchByMotelSearchBuilder(MotelSearchBuilder motelSearchBuilder) throws MalformedURLException {
-        return ResponseEntity.ok().body(motelService.findAll(motelSearchBuilder));
+    @GetMapping("/search")
+    public ResponseEntity<?>searchByMotelSearchBuilder(@RequestParam Map<String, String> search) throws MalformedURLException {
+        List<MotelResponse> motelResponses = motelService.findByParam(searchConverter.toMotelSearchBuilder(search));
+        return ResponseEntity.ok().body(motelResponses);
     }
     @GetMapping( value = "/dashboard")
     public ResponseEntity<?> getAll() throws MalformedURLException {
         List<MotelResponse> motelResponses = motelService.findAll();
         return ResponseEntity.ok().body(motelResponses);
     }
-    @GetMapping("/get-infor")
+    @GetMapping("/get-info")
     public ResponseEntity<?> getUserDetail(@RequestHeader("Authorization") String authorization) {
         String token = authorization.replace("Bearer ", "");
         return ResponseEntity.ok(userService.getUserDetail(token));

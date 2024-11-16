@@ -27,11 +27,9 @@ public class WebSecurityConfig{
                 .authorizeHttpRequests(request -> {
                     request
                             .requestMatchers("/static/**").permitAll()
-                            .requestMatchers("/users/login","/users/register","/login","/register","/dashboard").permitAll()
+                            .requestMatchers("/users/login","/users/register","/login","/register","/dashboard", "/search").permitAll()
                             .requestMatchers(GET,
                                     "/admin/**").hasRole("ADMIN")
-                            .requestMatchers(GET,
-                                    "/dashboard").hasRole("ADMIN")
                             .requestMatchers(GET,
                                     "/get-infor").hasRole("USER")
                             .requestMatchers(POST,

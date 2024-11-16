@@ -63,7 +63,13 @@ export default {
   methods: {
     async fetchMotels() {
       try {
-        const response = await axios.get("http://localhost:8081/dashboard");
+        const keyword = this.$route.query.keyword || "";
+        console.log("Keyword nhận được:", this.keyword);
+        const response = await axios.get("http://localhost:8081/search", {
+          params: {
+            keyword: keyword,
+          },
+        });
         this.motels = response.data;
         console.log(response.data);
       } catch (error) {

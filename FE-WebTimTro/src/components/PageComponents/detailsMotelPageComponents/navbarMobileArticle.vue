@@ -24,8 +24,8 @@
     </div>
   </div>
 </template>
-  
-  <script>
+    
+    <script>
 export default {
   name: "NavbarMobile",
   data() {
@@ -40,5 +40,5 @@ export default {
   },
 };
 </script>
-  
- 
+    
+   

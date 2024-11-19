@@ -147,7 +147,7 @@ export default {
       this.$router.push("/login");
     },
     toTorenPage() {
-      window.location.reload();
+      this.$router.push("/search");
     },
     toUserPage() {
       this.$router.push("/account/thong-tin-ca-nhan");

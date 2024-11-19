@@ -8,6 +8,7 @@ import '@/assets/slick-master/slick/slick.css';
 import '@/assets/slick-master/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.min.js';
 import 'slick-carousel/slick/slick-theme.css';
+import '@/assets/css/article.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.js'
 // import '@/assets/data/locations.js';

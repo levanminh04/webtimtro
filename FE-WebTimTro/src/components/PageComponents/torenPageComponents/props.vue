@@ -29,8 +29,8 @@
         <div class="price">{{ motel.price }} VND</div>
         <div class="prop-extra">
           <div class="prop-created">
-            <span>Ngày Đăng:</span>
-            <span>{{ motel.datePosted || "N/A" }}</span>
+            <span>Ngày Đăng: </span>
+            <span>{{ formatDate(motel.createAt) || "N/A" }}</span>
           </div>
           <div class="favorite">
             <ul>
@@ -61,20 +61,29 @@ export default {
     this.fetchMotels(); // Gọi hàm fetch dữ liệu
   },
   methods: {
+    toArticlePage() {
+      this.$router.push("/acticle");
+    },
     async fetchMotels() {
       try {
         const keyword = this.$route.query.keyword || "";
-        console.log("Keyword nhận được:", this.keyword);
         const response = await axios.get("http://localhost:8081/search", {
           params: {
             keyword: keyword,
           },
         });
+
         this.motels = response.data;
         console.log(response.data);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu motel:", error);
       }
+    },
+    formatDate(date) {
+      if (!date) return null;
+
+      const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+      return new Date(date).toLocaleDateString("vi-VN", options);
     },
   },
 };

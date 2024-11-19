@@ -24,7 +24,9 @@ import java.util.Set;
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
     private final UserDetailsService userDetailsService;
+
     public static final Set<String> WHITE_LIST = new HashSet<>();
+
     static {
         WHITE_LIST.add("/static/**");
         WHITE_LIST.add("/login");
@@ -38,26 +40,39 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        try{
+        try {
             final String authHeader = request.getHeader("Authorization");
-            if(authHeader == null || !authHeader.startsWith("Bearer ")){
+
+            // Không xử lý các request thuộc WHITE_LIST
+            if (shouldNotFilter(request)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                 return;
             }
+
             final String token = authHeader.substring(7);
             final String userName = jwtTokenUtils.extractUsername(token);
-            if(userName != null && SecurityContextHolder.getContext().getAuthentication() == null){
+
+            if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserEntity userEntity = (UserEntity) userDetailsService.loadUserByUsername(userName);
-                if(jwtTokenUtils.isValidateToken(token, userEntity)){
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userEntity
-                            , null
-                            , userEntity.getAuthorities());
+
+                if (jwtTokenUtils.isValidateToken(token, userEntity)) {
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userEntity,
+                            null,
+                            userEntity.getAuthorities()
+                    );
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
+
             filterChain.doFilter(request, response);
-        }catch(Exception e){
+        } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
         }
     }
@@ -67,5 +82,4 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         AntPathMatcher pathMatcher = new AntPathMatcher();
         return WHITE_LIST.stream().anyMatch(p -> pathMatcher.match(p, request.getRequestURI()));
     }
-
 }

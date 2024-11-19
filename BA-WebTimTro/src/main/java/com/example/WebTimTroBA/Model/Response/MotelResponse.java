@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -36,11 +38,11 @@ public class MotelResponse implements Comparable<MotelResponse>{
 
     private String detail;
 
-    private String crateAt;
-
     private OwnerResponse owner;
 
     private String address;
+
+    private LocalDate createAt;
 
     private String status;
 

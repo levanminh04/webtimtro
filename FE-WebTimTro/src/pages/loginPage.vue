@@ -170,6 +170,7 @@ export default {
           this.errorMessage = error.response.data;
           this.showModal = true;
         });
+  
     },
     closeModal() {
       this.showModal = false;

@@ -16,9 +16,10 @@ import static org.springframework.http.HttpMethod.*;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfig{
+public class WebSecurityConfig {
     private final JwtTokenFilter jwtTokenFilter;
     private final AuthenticationProvider authenticationProvider;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -26,25 +27,22 @@ public class WebSecurityConfig{
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> {
                     request
-                            .requestMatchers("/static/**").permitAll()
-                            .requestMatchers("/users/login","/users/register","/login","/register","/dashboard", "/search").permitAll()
-                            .requestMatchers(GET,
-                                    "/admin/**").hasRole("ADMIN")
-                            .requestMatchers(GET,
-                                    "/get-infor").hasRole("USER")
-                            .requestMatchers(POST,
-                                    "/create").hasRole("USER")
-                            .requestMatchers(GET,
-                                    "/users/{userName}/added-buildings").hasRole("USER")
-                            .requestMatchers(DELETE,
-                                    "/delete/**").hasRole("USER")
-                            .anyRequest().permitAll();
+                            .requestMatchers(
+                                    "/login", // Cho phép /login truy cập không cần xác thực
+                                    "/register",
+                                    "/static/**",
+                                    "/search",
+                                    "/users/login",
+                                    "/dashboard"
+                            ).permitAll()
+                            .requestMatchers(GET, "/admin/**").hasRole("ADMIN")
+                            .requestMatchers(GET, "/get-info").hasRole("USER")
+                            .requestMatchers(POST, "/create").hasRole("USER")
+                            .requestMatchers(DELETE, "/delete/**").hasRole("USER")
+                            .anyRequest().authenticated();
                 })
                 .authenticationProvider(authenticationProvider);
 
-
         return http.build();
     }
-
-
 }

@@ -40,6 +40,7 @@ public class MotelResponseConverter {
                 filesDTO.add(fileDTO);
             }
             motelResponse.setFilesDTO(filesDTO);
+            motelResponse.setCreateAt(motelEntity.getCreatedAt().toLocalDate());
             motelResponse.setOwner(ownerResponseConverter.toOwnerResponse(motelEntity.getUser()));
             motelResponse.setAddress("Số " + motelEntity.getHouseNumber() + ", " + motelEntity.getStreet() + ", "
                                         + motelEntity.getWard() + ", " + motelEntity.getDistrict() + ", " + motelEntity.getProvince());

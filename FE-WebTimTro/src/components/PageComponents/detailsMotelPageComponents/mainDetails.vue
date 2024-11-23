@@ -160,6 +160,7 @@
             class="col-6 col-md-4 col-lg-3"
           >
             <div class="card">
+              <!-- Hình ảnh -->
               <img
                 v-if="nearbyMotel.filesDTO?.length > 0"
                 :src="nearbyMotel.filesDTO[0].fileUrl"
@@ -172,6 +173,8 @@
                 class="card-img-top"
                 alt="Property"
               />
+
+              <!-- Nội dung -->
               <div class="card-body">
                 <h5 class="card-title text-danger">
                   {{ formatVND(nearbyMotel.price) }}
@@ -233,14 +236,20 @@ export default {
         );
         return;
       }
-      const districtx = removeVietnameseTones(this.motel.district);
+
       try {
         const response = await axios.get("http://localhost:8081/search", {
           params: {
-            district: districtx,
+            district: this.motel.district,
           },
         });
-        this.motels = response.data;
+
+        // Lọc bỏ nhà trọ hiện tại
+        this.motels = response.data.filter(
+          (nearbyMotel) => nearbyMotel.id !== this.motel.id
+        );
+
+        console.log("Motels gần đó:", this.motels);
       } catch (error) {
         console.error("Error fetching motel data:", error);
       }
@@ -261,6 +270,13 @@ export default {
 };
 </script>
 <style scoped>
+.card-img-top {
+  object-fit: cover; /* Giữ tỷ lệ hình ảnh */
+  width: 100%; /* Hình ảnh chiếm toàn bộ chiều ngang */
+  height: 200px; /* Chiều cao cố định */
+  border-radius: 4px; /* Tùy chọn: bo tròn góc nếu cần */
+}
+
 .carousel-image {
   max-height: 400px; /* Giới hạn chiều cao ảnh */
   object-fit: cover; /* Căn chỉnh ảnh để phù hợp với khung */

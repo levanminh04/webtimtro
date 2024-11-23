@@ -32,9 +32,8 @@
       <!-- BANNER CONTENT -->
       <cls-banner />
       <!-- END BANNER CONTENT -->
-
+      <propertyHCM></propertyHCM>
       <!-- PROPERTY LIST -->
-      <cls-property-listing />
       <!-- END PROPERTY LIST -->
     </div>
   </div>
@@ -50,8 +49,8 @@ import banner from "@/components/PageComponents/homePageComponents/banner.vue";
 import footer from "@/components/PageComponents/homePageComponents/footer.vue";
 import navbar from "@/components/PageComponents/homePageComponents/navbar.vue";
 import navbarMobile from "@/components/PageComponents/homePageComponents/navbarMobile.vue";
-import propertyListing from "@/components/PageComponents/homePageComponents/propertyListing.vue";
-
+import propertyListing from "@/components/PageComponents/homePageComponents/propertyListingHN.vue";
+import propertyListingHCM from "@/components/PageComponents/homePageComponents/propertyListingHCM.vue";
 export default {
   name: "homePages",
   components: {
@@ -62,6 +61,7 @@ export default {
     "cls-property-listing": propertyListing,
     "cls-footer": footer,
     "cls-banner": banner,
+    propertyHCM: propertyListingHCM,
   },
   data() {
     return {

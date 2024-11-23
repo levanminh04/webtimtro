@@ -9,7 +9,8 @@
         class="form-control"
         id="title"
         placeholder="Nhập Tên Toà Nhà"
-        v-model="title"
+        v-model="formData.title"
+        required
       />
       <label for="title">Nhập tiêu đề</label>
     </div>
@@ -21,7 +22,8 @@
         class="form-control"
         id="houseNumber"
         placeholder="Số nhà"
-        v-model="houseNumber"
+        v-model="formData.houseNumber"
+        required
       />
       <label for="houseNumber">Số nhà</label>
     </div>
@@ -32,15 +34,15 @@
         <div class="col-6 col-sm-3">
           <select
             class="form-select mb-3"
-            v-model="province"
+            v-model="selectedLocations.province"
             @change="onProvinceChange"
+            required
           >
-            <option value="" selected>Chọn tỉnh thành</option>
-
+            <option value="" selected disabled>Chọn tỉnh thành</option>
             <option
               v-for="province in provinces"
               :key="province.code"
-              :value="province.code"
+              :value="province"
             >
               {{ province.name }}
             </option>
@@ -49,15 +51,16 @@
         <div class="col-6 col-sm-3">
           <select
             class="form-select mb-3"
-            v-model="district"
+            v-model="selectedLocations.district"
             @change="onDistrictChange"
             :disabled="!districts.length"
+            required
           >
             <option value="" disabled selected>Chọn quận huyện</option>
             <option
               v-for="district in districts"
               :key="district.code"
-              :value="district.code"
+              :value="district"
             >
               {{ district.name }}
             </option>
@@ -66,12 +69,12 @@
         <div class="col-6 col-sm-3">
           <select
             class="form-select mb-3"
-            v-model="ward"
-            @change="onWardChange"
+            v-model="selectedLocations.ward"
             :disabled="!wards.length"
+            required
           >
-            <option selected value="">Chọn phường xã</option>
-            <option v-for="ward in wards" :key="ward.code" :value="ward.code">
+            <option value="" disabled selected>Chọn phường xã</option>
+            <option v-for="ward in wards" :key="ward.code" :value="ward">
               {{ ward.name }}
             </option>
           </select>
@@ -81,7 +84,8 @@
             type="text"
             class="form-control mb-3"
             placeholder="Đường"
-            v-model="street"
+            v-model="formData.street"
+            required
           />
         </div>
       </div>
@@ -94,7 +98,8 @@
         class="form-control"
         id="area"
         placeholder="Diện tích"
-        v-model="area"
+        v-model="formData.area"
+        required
       />
       <label for="area">Diện tích (m²)</label>
     </div>
@@ -106,7 +111,8 @@
         class="form-control"
         id="price"
         placeholder="Giá thuê"
-        v-model="price"
+        v-model="formData.price"
+        required
       />
       <label for="price">Giá thuê (VND)</label>
     </div>
@@ -118,7 +124,8 @@
         class="form-control"
         id="interior"
         placeholder="Nội thất"
-        v-model="interior"
+        v-model="formData.interior"
+        required
       />
       <label for="interior">Nội thất</label>
     </div>
@@ -130,7 +137,8 @@
         class="form-control"
         id="type"
         placeholder="Loại hình"
-        v-model="type"
+        v-model="formData.type"
+        required
       />
       <label for="type">Loại hình</label>
     </div>
@@ -141,7 +149,8 @@
         class="form-control"
         id="detail"
         placeholder="Mô tả chi tiết"
-        v-model="detail"
+        v-model="formData.detail"
+        required
       ></textarea>
       <label for="detail">Mô tả chi tiết</label>
     </div>
@@ -153,17 +162,15 @@
         class="form-control"
         id="maxPeople"
         placeholder="Số người tối đa"
-        v-model="maxPeople"
+        v-model="formData.maxPeople"
+        required
       />
       <label for="maxPeople">Số người tối đa</label>
     </div>
 
     <!-- Phần thêm ảnh -->
     <div class="mb-3">
-      <label for="images" class="form-label"
-        >Chọn ảnh (Bạn có thể chọn nhiều ảnh)</label
-      >
-      <input type="file" class="form-control" id="formFileMultiple" multiple />
+      <uploadImage @update:files="handleUploadedFiles" />
     </div>
 
     <!-- Các nút đồng ý và huỷ -->
@@ -171,139 +178,141 @@
       <button type="button" class="btn btn-success me-2" @click="submitForm">
         Đồng ý
       </button>
-      <button type="button" class="btn btn-secondary">Huỷ</button>
+      <button type="button" class="btn btn-secondary" @click="resetForm">
+        Huỷ
+      </button>
     </div>
   </fieldset>
 </template>
 
 <script>
 import axios from "axios";
+import uploadImage from "./uploadImage.vue";
 
 export default {
+  components: {
+    uploadImage,
+  },
   data() {
     return {
       provinces: [],
       districts: [],
       wards: [],
-      title: null,
-      type: null,
-      houseNumber: null,
-      ward: "",
-      district: "",
-      province: "",
-      interior: null,
-      maxPeople: null,
-      detail: null,
-      street: null,
-      area: null,
-      price: null,
+      selectedLocations: {
+        province: "",
+        district: "",
+        ward: "",
+      },
+      formData: {
+        title: null,
+        type: null,
+        houseNumber: null,
+        street: null,
+        area: null,
+        price: null,
+        interior: null,
+        maxPeople: null,
+        detail: null,
+      },
+      uploadedImages: [],
     };
   },
   created() {
-    this.fetchCities();
+    this.fetchProvinces();
   },
   methods: {
-    async fetchCities() {
+    handleUploadedFiles(files) {
+      this.uploadedImages = files;
+    },
+    async fetchProvinces() {
       try {
         const response = await axios.get(
           "https://provinces.open-api.vn/api/?depth=1"
         );
         this.provinces = response.data;
-        console.log(response.data);
       } catch (error) {
-        console.error("Error fetching cities:", error);
+        console.error("Error fetching provinces:", error);
       }
     },
     async onProvinceChange() {
-      this.district = "";
-      this.ward = "";
+      this.selectedLocations.district = "";
+      this.selectedLocations.ward = "";
+      this.districts = [];
       this.wards = [];
-      if (this.province) {
+
+      if (this.selectedLocations.province) {
         try {
           const response = await axios.get(
-            `https://provinces.open-api.vn/api/p/${this.province}?depth=2`
+            `https://provinces.open-api.vn/api/p/${this.selectedLocations.province.code}?depth=2`
           );
           this.districts = response.data.districts;
         } catch (error) {
           console.error("Error fetching districts:", error);
         }
-      } else {
-        this.districts = [];
       }
-      for (let item in this.provinces) {
-        if (item.code == this.province) {
-          this.province = item.name;
-        }
-      }
-      console.log(this.province);
     },
     async onDistrictChange() {
-      this.ward = "";
-      if (this.district) {
+      this.selectedLocations.ward = "";
+      this.wards = [];
+
+      if (this.selectedLocations.district) {
         try {
           const response = await axios.get(
-            `https://provinces.open-api.vn/api/d/${this.district}?depth=2`
+            `https://provinces.open-api.vn/api/d/${this.selectedLocations.district.code}?depth=2`
           );
           this.wards = response.data.wards;
         } catch (error) {
           console.error("Error fetching wards:", error);
         }
-      } else {
-        this.wards = [];
-      }
-      for (let item in this.districts) {
-        if (item.code == this.district) {
-          this.district = item.name;
-        }
       }
     },
-
+    resetForm() {
+      this.formData = {
+        title: null,
+        type: null,
+        houseNumber: null,
+        street: null,
+        area: null,
+        price: null,
+        interior: null,
+        maxPeople: null,
+        detail: null,
+      };
+      this.selectedLocations = {
+        province: "",
+        district: "",
+        ward: "",
+      };
+      this.uploadedImages = [];
+    },
     async submitForm() {
+      // Validation
+      if (!this.validateForm()) {
+        alert("Vui lòng điền đầy đủ thông tin!");
+        return;
+      }
+
       const formData = new FormData();
-      for (let item of this.provinces) {
-        if (item.code == this.province) {
-          formData.append("province", item.name);
-          break;
-        }
-      }
 
-      // Lấy tên quận/huyện từ `districts`
-      for (let item of this.districts) {
-        if (item.code == this.district) {
-          formData.append("district", item.name);
-          break;
-        }
-      }
+      // Append location data
+      formData.append("province", this.selectedLocations.province.name);
+      formData.append("district", this.selectedLocations.district.name);
+      formData.append("ward", this.selectedLocations.ward.name);
 
-      // Lấy tên phường/xã từ `wards`
-      for (let item of this.wards) {
-        if (item.code == this.ward) {
-          formData.append("ward", item.name);
-          break;
-        }
-      }
+      // Append form data
+      Object.keys(this.formData).forEach((key) => {
+        formData.append(key, this.formData[key]);
+      });
 
-      formData.append("title", this.title);
-      // formData.append("province", this.province);
-      formData.append("maxPeople", this.maxPeople);
-      formData.append("houseNumber", this.houseNumber);
-      formData.append("street", this.street);
-      // formData.append("ward", this.ward);
-      // formData.append("district", this.district);
-      formData.append("area", this.area);
-      formData.append("price", this.price);
-      formData.append("interior", this.interior);
-      formData.append("maxPeople", this.type);
-      formData.append("detail", this.detail);
+      // Append images
+      this.uploadedImages.forEach((file, index) => {
+        formData.append(`files[${index}]`, file);
+      });
 
-      const fileImg = document.getElementById("formFileMultiple").files;
-      for (let i = 0; i < fileImg.length; i++) {
-        formData.append("files", fileImg[i]);
-      }
       const token = localStorage.getItem("token");
-      console.log(formData);
+
       try {
-        console.log("Token:", token);
+        console.log(formData);
         const response = await axios.post(
           "http://localhost:8081/create",
           formData,
@@ -314,11 +323,23 @@ export default {
             },
           }
         );
-        alert("Thành công: " + response.data);
+        alert("Tạo mới thành công!");
+        this.resetForm();
       } catch (error) {
         console.error("Error:", error);
-        alert("Đã xảy ra lỗi!");
+        alert(error.response?.data?.message || "Đã xảy ra lỗi khi tạo mới!");
       }
+    },
+    validateForm() {
+      // Check if all required fields are filled
+      const requiredFields = Object.values(this.formData);
+      const locationFields = Object.values(this.selectedLocations);
+
+      return (
+        requiredFields.every((field) => field != null && field !== "") &&
+        locationFields.every((field) => field !== "") &&
+        this.uploadedImages.length > 0
+      );
     },
   },
 };

@@ -2,6 +2,7 @@ package com.example.WebTimTroBA.Service;
 
 import com.example.WebTimTroBA.Model.DTO.UserDTO;
 import com.example.WebTimTroBA.Model.Entity.UserEntity;
+import com.example.WebTimTroBA.Model.Response.MotelResponse;
 import com.example.WebTimTroBA.Model.Response.UserResponse;
 import org.springframework.http.ResponseEntity;
 
@@ -14,5 +15,6 @@ public interface UserService {
     String login(String username, String password) throws Exception;
     Optional<UserEntity> findByUserName(String username);
     Optional<UserEntity> findById(Integer id);
+    MotelResponse findMotelById(Integer id);
     UserResponse getUserDetail(String token);
 }

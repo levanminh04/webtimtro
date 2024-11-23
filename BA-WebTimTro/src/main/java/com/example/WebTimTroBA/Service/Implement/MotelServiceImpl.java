@@ -107,4 +107,9 @@ public class MotelServiceImpl implements MotelService {
     public void deleteById(Integer Id) {
         motelRepository.deleteById(Id);
     }
+
+    @Override
+    public MotelResponse getById(Integer Id) {
+        return motelResponseConverter.toMotelResponse(motelRepository.findById(Id).get());
+    }
 }

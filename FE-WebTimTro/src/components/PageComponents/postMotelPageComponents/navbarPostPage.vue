@@ -157,7 +157,6 @@ export default {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response.data);
           this.userInfo = response.data;
         } catch (error) {
           console.error("Error fetching user info:", error);

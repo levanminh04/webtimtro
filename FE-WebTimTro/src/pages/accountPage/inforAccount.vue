@@ -2,7 +2,7 @@
   <div class="hpc-navbar">
     <div class="container">
       <div class="row">
-        <navbarInforAccount />
+        <navbarInforAccount></navbarInforAccount>
       </div>
     </div>
   </div>
@@ -14,8 +14,16 @@
       <div class="widget" style="background-color: #ecececc4">
         <ul class="list-group">
           <li class="list-group-item active">Thông tin Tài Khoản</li>
-          <li class="list-group-item" style="cursor: pointer">Quản lý trọ đã đăng</li>
-          <li class="list-group-item" style="cursor: pointer">Thông báo</li>
+          <li class="list-group-item" style="cursor: pointer">
+            Quản lý trọ đã đăng
+          </li>
+          <li
+            class="list-group-item"
+            @click="toPostPage"
+            style="cursor: pointer"
+          >
+            Đăng Tin
+          </li>
           <li class="list-group-item" style="cursor: pointer">
             Quản lý đánh giá trợ
           </li>
@@ -60,9 +68,9 @@
 </template>
 <script>
 import { ref } from "vue";
-import navbarInforAccount from "@/components/PageComponents/inforAccountComponents/navbarInforAccount.vue";
+import navbarInforAccount from "@/components/PageComponents/accountPageComponents/navbarInforAccount.vue";
 export default {
-  name: "UserProfile",
+  name: "InforAccount",
   components: {
     navbarInforAccount,
   },
@@ -97,6 +105,11 @@ export default {
       updateInfo,
     };
   },
+  methods: {
+    toPostPage() {
+      this.$router.push("/account/dang-tin");
+    },
+  },
 };
 </script>
 <style scoped>
@@ -105,7 +118,6 @@ export default {
   color: white;
   font-weight: bold;
 }
-
 h3 {
   color: #57bee7;
   font-size: xx-large;

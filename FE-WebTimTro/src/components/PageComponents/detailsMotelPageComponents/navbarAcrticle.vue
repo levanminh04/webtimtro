@@ -150,7 +150,7 @@ export default {
       this.$router.push("/search");
     },
     toUserPage() {
-      this.$router.push("/account/thong-tin-ca-nhan");
+      this.$router.push("/account/thong-tin-tai-khoan");
     },
     toPostPage() {
       this.$router.push("/postMotel");
@@ -164,7 +164,6 @@ export default {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response.data);
           this.userInfo = response.data;
         } catch (error) {
           console.error("Error fetching user info:", error);

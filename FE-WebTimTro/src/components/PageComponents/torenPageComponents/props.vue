@@ -1,4 +1,22 @@
 <template>
+  <div class="property-list-result">
+    <div class="row">
+      <div class="col-sm-9">
+        <div class="property-result-summary">
+          Có <b>{{ motels.length }}</b> kết quả
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="sort-dropdown">
+          <select id="sort" v-model="sortOption" @change="sortMotels">
+            <option value="date-desc">Mới Nhất</option>
+            <option value="price-asc">Giá tiền (Tăng dần)</option>
+            <option value="price-desc">Giá tiền (Giảm dần)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
   <ul class="props">
     <li
       v-for="(motel, index) in motels"
@@ -16,9 +34,11 @@
       </div>
       <div class="prop-info">
         <h2 class="prop-title">
-          <a class="link-overlay" @click="toArticlePage">{{
-            motel.title || motel.detail
-          }}</a>
+          <a
+            class="link-overlay"
+            @click="toDetailsPage(motel.id, motel.title)"
+            >{{ motel.title || motel.detail }}</a
+          >
         </h2>
         <div class="prop-addr">{{ motel.address }}</div>
         <ul class="prop-attr">
@@ -26,7 +46,7 @@
             <i class="fa fa-chart-area"></i> {{ motel.area }} m<sup>2</sup>
           </li>
         </ul>
-        <div class="price">{{ motel.price }} VND</div>
+        <div class="price">{{ formatVND(motel.price) }}</div>
         <div class="prop-extra">
           <div class="prop-created">
             <span>Ngày Đăng: </span>
@@ -49,36 +69,79 @@
 
 <script>
 import axios from "axios";
-
+import { removeVietnameseTones } from "../../../utils/removeVnTone";
 export default {
   data() {
     return {
       motels: [],
+      sortOption: "date-desc",
     };
   },
+  watch: {
+    $route: {
+      immediate: true,
+      handler() {
+        this.fetchMotels(); // Gọi lại API khi query thay đổi
+      },
+    },
+  },
+
   mounted() {
-    console.log("onMounted hook"); // Log khi component đã mount
     this.fetchMotels(); // Gọi hàm fetch dữ liệu
   },
   methods: {
-    toArticlePage() {
-      this.$router.push("/acticle");
+    formatVND(amount) {
+      if (typeof amount !== "number") {
+        return "Invalid input";
+      }
+      return amount.toLocaleString("vi-VN", { style: "decimal" }) + " VND";
     },
+    sortMotels() {
+      if (this.sortOption === "date-asc") {
+        this.motels.sort((a, b) => new Date(a.createAt) - new Date(b.createAt));
+      } else if (this.sortOption === "date-desc") {
+        this.motels.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+      } else if (this.sortOption === "price-asc") {
+        this.motels.sort((a, b) => a.price - b.price);
+      } else if (this.sortOption === "price-desc") {
+        this.motels.sort((a, b) => b.price - a.price);
+      }
+    },
+    toDetailsPage(id, title) {
+      const newTitle = removeVietnameseTones(title);
+      const slug = newTitle
+        .toLowerCase()
+        .replace(/ /g, "-") // Thay khoảng trắng bằng dấu '-'
+        .replace(/[^\w-]+/g, "");
+      this.$router.push(`/motel/${slug}-${id}`);
+    },
+
     async fetchMotels() {
       try {
         const keyword = this.$route.query.keyword || "";
+        const filters = {
+          province: this.$route.query.province || "",
+          district: this.$route.query.district || "",
+          priceFrom: this.$route.query.priceFrom || null,
+          priceTo: this.$route.query.priceTo || null,
+          areaFrom: this.$route.query.areaFrom || null,
+          areaTo: this.$route.query.areaTo || null,
+        };
+
         const response = await axios.get("http://localhost:8081/search", {
           params: {
-            keyword: keyword,
+            keyword,
+            ...filters, // Truyền các bộ lọc vào params
           },
         });
 
         this.motels = response.data;
-        console.log(response.data);
+        this.sortMotels();
       } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu motel:", error);
+        console.error("Lỗi khi lấy dữ liệu motels:", error);
       }
     },
+
     formatDate(date) {
       if (!date) return null;
 

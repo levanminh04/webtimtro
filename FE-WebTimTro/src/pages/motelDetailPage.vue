@@ -19,7 +19,7 @@ import NavbarMobileArticle from "@/components/PageComponents/detailsMotelPageCom
 import Footer from "@/components/PageComponents/homePageComponents/footer.vue";
 
 export default {
-  name: "ActiclePage",
+  name: "MotelDetail",
   components: {
     NavbarAcrticle,
     NavbarMobileArticle,

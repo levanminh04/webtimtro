@@ -4,6 +4,7 @@ import com.example.WebTimTroBA.Converter.UserResponseConverter;
 import com.example.WebTimTroBA.Model.DTO.UserDTO;
 import com.example.WebTimTroBA.Model.Entity.RoleEntity;
 import com.example.WebTimTroBA.Model.Entity.UserEntity;
+import com.example.WebTimTroBA.Model.Response.MotelResponse;
 import com.example.WebTimTroBA.Model.Response.UserResponse;
 import com.example.WebTimTroBA.Repository.RoleRepository;
 import com.example.WebTimTroBA.Repository.UserRepository;
@@ -99,6 +100,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserEntity> findById(Integer id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public MotelResponse findMotelById(Integer id) {
+        return null;
     }
 
     @Override

@@ -34,7 +34,6 @@
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
           <!-- <cls-banner-widget /> -->
           <cls-kinds-of-house />
-          <cls-city-area />
         </div>
       </div>
     </div>
@@ -47,9 +46,8 @@
 import Footer from "@/components/PageComponents/homePageComponents/footer.vue";
 import navbarMobileVue from "@/components/PageComponents/homePageComponents/navbarMobile.vue";
 import BannerWidget from "@/components/PageComponents/torenPageComponents/bannerWidget.vue";
-import Breadcrumb from "@/components/PageComponents/torenPageComponents/breadcrumb.vue";
 import CityArea from "@/components/PageComponents/torenPageComponents/cityArea.vue";
-import KindsOfHouse from "@/components/PageComponents/torenPageComponents/kindsOfHouse.vue";
+import KindsOfHouse from "@/components/PageComponents/torenPageComponents/fillerSearch.vue";
 import NavbarToren from "@/components/PageComponents/torenPageComponents/navbarToren.vue";
 import Pagination from "@/components/PageComponents/torenPageComponents/pagination.vue";
 import Props from "@/components/PageComponents/torenPageComponents/props.vue";
@@ -63,7 +61,6 @@ export default {
     clsNavbar: NavbarToren,
     clsNavbarmobile: navbarMobileVue,
     clsSearchNavbar: SearchNavbar,
-    clsBreadcrumb: Breadcrumb,
     clsResultList: ResultList,
     clsProps: Props,
     clsPagination: Pagination,

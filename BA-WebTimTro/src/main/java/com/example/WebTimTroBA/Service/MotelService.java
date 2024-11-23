@@ -16,4 +16,5 @@ public interface MotelService {
     List<MotelResponse> findAndPagination(Integer page) throws MalformedURLException;
     List<MotelResponse> findByUserName(String name) throws MalformedURLException;
     void deleteById(Integer Id);
+    MotelResponse getById(Integer Id);
 }

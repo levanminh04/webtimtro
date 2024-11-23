@@ -1,20 +1,23 @@
 <template>
   <div>
     <!-- Breadcrumb -->
-
     <div class="container">
       <div class="row">
         <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/search">Tìm Thuê</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Library</li>
+            <li class="breadcrumb-item">
+              <a href="/search">Tìm Thuê</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              {{ motel?.title || "Đang tải..." }}
+            </li>
           </ol>
         </nav>
       </div>
     </div>
 
     <!-- Page Content -->
-    <div class="container">
+    <div v-if="motel" class="container">
       <div class="row">
         <!-- Main Content -->
         <div class="col-lg-8">
@@ -27,43 +30,26 @@
             >
               <div class="carousel-indicators">
                 <button
+                  v-for="(file, index) in motel.filesDTO"
+                  :key="index"
                   type="button"
-                  data-bs-target="#carouselExampleDark"
-                  data-bs-slide-to="0"
-                  class="active"
-                  aria-current="true"
-                ></button>
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleDark"
-                  data-bs-slide-to="1"
-                ></button>
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleDark"
-                  data-bs-slide-to="2"
+                  :data-bs-target="'#carouselExampleDark'"
+                  :data-bs-slide-to="index"
+                  :class="{ active: index === 0 }"
+                  :aria-current="index === 0"
                 ></button>
               </div>
               <div class="carousel-inner">
-                <div class="carousel-item active" data-bs-interval="10000">
+                <div
+                  v-for="(file, index) in motel.filesDTO"
+                  :key="index"
+                  class="carousel-item"
+                  :class="{ active: index === 0 }"
+                >
                   <img
-                    src="https://cloud.mogi.vn/images/2020/10/06/345/3617025d26e4481aa639847e9b6b62a3.jpg"
-                    class="d-block w-100"
-                    alt="Image 1"
-                  />
-                </div>
-                <div class="carousel-item" data-bs-interval="2000">
-                  <img
-                    src="https://i.pinimg.com/736x/6c/d6/82/6cd682d354273462f797e79957423462.jpg"
-                    class="d-block w-100"
-                    alt="Image 2"
-                  />
-                </div>
-                <div class="carousel-item">
-                  <img
-                    src="https://cloud.mogi.vn/images/2020/10/06/345/3617025d26e4481aa639847e9b6b62a3.jpg"
-                    class="d-block w-100"
-                    alt="Image 3"
+                    :src="file.fileUrl"
+                    class="d-block w-100 carousel-image"
+                    alt="Image"
                   />
                 </div>
               </div>
@@ -95,13 +81,13 @@
 
             <!-- Article Header -->
             <div class="header-article my-4">
-              <h1 class="fw-bold">
-                Căn hộ mini, có gác full nội thất, siêu đẹp q7
-              </h1>
-              <p class="text-muted">
-                Đường số 1, Phường Bình Thuận, Quận 7, TPHCM
-              </p>
-              <h2 class="text-danger fw-bold">5 triệu</h2>
+              <h1 class="fw-bold">{{ motel.title }}</h1>
+              <p class="text-muted">{{ motel.address }}</p>
+              <div class="price-info my-5">
+                <h2 class="text-danger fw-bold">
+                  {{ formatVND(motel.price) }}
+                </h2>
+              </div>
             </div>
 
             <!-- Property Info -->
@@ -109,10 +95,16 @@
               <h2 class="fw-bold">Thông tin chính</h2>
               <div class="row g-3">
                 <ul class="col-6 list-unstyled">
-                  <li><strong>Giá:</strong> 5 triệu</li>
-                  <li><strong>Diện tích sử dụng:</strong> 30 m<sup>2</sup></li>
-                  <li><strong>Ngày đăng:</strong> 27/09/2020</li>
-                  <li><strong>Mã BĐS:</strong> 20657824</li>
+                  <li><strong>Giá:</strong> {{ formatVND(motel.price) }}</li>
+                  <li>
+                    <strong>Diện tích sử dụng:</strong> {{ motel.area }} m<sup
+                      >2</sup
+                    >
+                  </li>
+                  <li>
+                    <strong>Ngày đăng:</strong> {{ formatDate(motel.createAt) }}
+                  </li>
+                  <li><strong>Mã BĐS:</strong> {{ motel.id }}</li>
                 </ul>
                 <ul class="col-6 list-unstyled">
                   <li><strong>Phòng ngủ:</strong> 1</li>
@@ -126,12 +118,7 @@
             <!-- Description -->
             <div class="prop-info-content mt-4">
               <h2 class="fw-bold">Mô tả chi tiết</h2>
-              <p>
-                🌟 Vị trí ngay trung tâm Quận 7: gần sát Lotte Mart, SC ViVo, Đh
-                Tôn Đức Thắng, Rmit... Chỉ 5p ra Quận 4, 10p qua Q1,Q5,Q8...
-              </p>
-              <p>🌟 Phòng mới tinh chưa ai ở.</p>
-              <p>🌟 Đầy đủ tiện nghi, chỉ cần xách vali đến ở.</p>
+              <p>{{ motel.detail }}</p>
             </div>
           </div>
         </div>
@@ -139,7 +126,6 @@
         <!-- Sidebar -->
         <div class="col-lg-4">
           <div class="side-bar">
-            <!-- Agent Info -->
             <div class="agent-info bg-light p-3 rounded">
               <img
                 src="https://mogi.vn/content/images/avatar.png"
@@ -147,8 +133,10 @@
                 class="img-thumbnail rounded-circle mb-3"
                 style="width: 80px; height: 80px"
               />
-              <h5>Trần Văn Hoàn</h5>
-              <p class="text-muted mb-1">Đã tham gia: 1 năm 2 tháng</p>
+              <h5>{{ motel.owner?.fullName }}</h5>
+              <p class="text-muted mb-1">
+                Số Điện Thoại {{ motel.owner?.phone }}
+              </p>
               <a
                 href="tel:0964341***"
                 class="btn btn-primary btn-sm d-block my-2"
@@ -164,47 +152,118 @@
     <!-- Similar Properties -->
     <div class="SimilarUrl bg-light py-4">
       <div class="container">
-        <h2 class="fw-bold mb-4">Bất động sản tương tự</h2>
+        <h2 class="fw-bold mb-4">Các phòng trọ gần đó</h2>
         <div class="row g-3">
-          <div class="col-6 col-md-4 col-lg-3">
+          <div
+            v-for="(nearbyMotel, index) in motels"
+            :key="index"
+            class="col-6 col-md-4 col-lg-3"
+          >
             <div class="card">
               <img
-                src="https://cloud.mogi.vn/images/thumb-small/2020/10/09/096/c343e80e8eb6412bb12bce1c63e33e20.jpg"
+                v-if="nearbyMotel.filesDTO?.length > 0"
+                :src="nearbyMotel.filesDTO[0].fileUrl"
+                class="card-img-top"
+                alt="Property"
+              />
+              <img
+                v-else
+                src="https://via.placeholder.com/300x200?text=No+Image"
                 class="card-img-top"
                 alt="Property"
               />
               <div class="card-body">
-                <h5 class="card-title text-danger">6 triệu 300 nghìn</h5>
+                <h5 class="card-title text-danger">
+                  {{ formatVND(nearbyMotel.price) }}
+                </h5>
                 <p class="card-text">
-                  <a href="#"
-                    >Căn Hộ Gác Lững Tiện Nghi, PHAN XÍCH LONG - Gần CoopMart
-                    Rạch Miêu</a
+                  <a
+                    :href="`/motel/${nearbyMotel.title.replace(/ /g, '-')}-${
+                      nearbyMotel.id
+                    }`"
                   >
+                    {{ nearbyMotel.title }}
+                  </a>
                 </p>
               </div>
             </div>
           </div>
-          <!-- Add more cards here -->
         </div>
       </div>
     </div>
   </div>
 </template>
-    
-    <script>
+<script>
+import axios from "axios";
+import { removeVietnameseTones } from "@/utils/removeVnTone";
 export default {
   name: "Article",
+  data() {
+    return {
+      motels: [],
+      motel: [], // Lưu dữ liệu từ API
+    };
+  },
+  methods: {
+    formatDate(date) {
+      if (!date) return null;
+
+      const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+      return new Date(date).toLocaleDateString("vi-VN", options);
+    },
+    formatVND(amount) {
+      if (typeof amount !== "number") {
+        return "Invalid input";
+      }
+      return amount.toLocaleString("vi-VN", { style: "decimal" }) + " VND";
+    },
+    async fetchMotelData(id) {
+      try {
+        const response = await axios.get(`http://localhost:8081/motel/${id}`);
+        this.motel = response.data;
+        console.log(this.motel);
+      } catch (error) {
+        console.error("Error fetching motel data:", error);
+      }
+    },
+    async fetchMotelInThisDistrict() {
+      if (!this.motel.district) {
+        console.error(
+          "District chưa có giá trị. Đợi dữ liệu tải từ fetchMotelData."
+        );
+        return;
+      }
+      const districtx = removeVietnameseTones(this.motel.district);
+      try {
+        const response = await axios.get("http://localhost:8081/search", {
+          params: {
+            district: districtx,
+          },
+        });
+        this.motels = response.data;
+      } catch (error) {
+        console.error("Error fetching motel data:", error);
+      }
+    },
+  },
+  mounted() {
+    const motelId = this.$route.params.id.split("-").pop(); // Lấy ID từ URL
+
+    if (motelId) {
+      this.fetchMotelData(motelId).then(() => {
+        // Sau khi fetch dữ liệu phòng trọ, gọi fetchMotelInThisDistrict
+        this.fetchMotelInThisDistrict();
+      });
+    } else {
+      console.error("Motel ID không hợp lệ");
+    }
+  },
 };
 </script>
-    
-    <style scoped>
-.header-article h1 {
-  font-size: 1.5rem;
-}
-
-.carousel-item img {
-  height: 500px;
-  object-fit: contain;
+<style scoped>
+.carousel-image {
+  max-height: 400px; /* Giới hạn chiều cao ảnh */
+  object-fit: cover; /* Căn chỉnh ảnh để phù hợp với khung */
+  object-position: cover; /* Căn giữa nội dung ảnh */
 }
 </style>
-    

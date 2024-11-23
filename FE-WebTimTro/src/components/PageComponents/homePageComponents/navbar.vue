@@ -151,10 +151,10 @@ export default {
       this.$router.push("/search");
     },
     toUserPage() {
-      this.$router.push("/account/thong-tin-ca-nhan");
+      this.$router.push("/account/thong-tin-tai-khoan");
     },
     toPostPage() {
-      this.$router.push("/postMotel");
+      this.$router.push("/account/dang-tin");
     },
     async getUserInfo() {
       const token = localStorage.getItem("token");
@@ -165,7 +165,6 @@ export default {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response.data);
           this.userInfo = response.data;
         } catch (error) {
           console.error("Error fetching user info:", error);

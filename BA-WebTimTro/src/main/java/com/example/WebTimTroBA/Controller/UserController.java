@@ -1,5 +1,6 @@
 package com.example.WebTimTroBA.Controller;
 
+
 import com.example.WebTimTroBA.Converter.SearchConverter;
 import com.example.WebTimTroBA.CustomException.NotNullException;
 import com.example.WebTimTroBA.Model.DTO.MotelDTO;
@@ -57,7 +58,11 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
+    @GetMapping("/motel/{id}")
+    public ResponseEntity<?> getMotelById(@PathVariable("id") Integer id) throws MalformedURLException {
+        MotelResponse motelResponse = motelService.getById(id);
+        return motelResponse != null ? ResponseEntity.ok().body(motelResponse) : ResponseEntity.notFound().build();
+    }
     @PostMapping(value="/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO){
         try{

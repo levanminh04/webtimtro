@@ -31,9 +31,10 @@ public class WebSecurityConfig {
                                     "/login", // Cho phép /login truy cập không cần xác thực
                                     "/register",
                                     "/static/**",
-                                    "/search",
+                                    "/search/**",
                                     "/users/login",
-                                    "/dashboard"
+                                    "/dashboard",
+                                    "/motel/{id}"
                             ).permitAll()
                             .requestMatchers(GET, "/admin/**").hasRole("ADMIN")
                             .requestMatchers(GET, "/get-info").hasRole("USER")

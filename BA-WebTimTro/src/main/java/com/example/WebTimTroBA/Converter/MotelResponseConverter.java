@@ -54,4 +54,22 @@ public class MotelResponseConverter {
         Collections.sort(result);
         return result;
     }
+    public MotelResponse toMotelResponse(MotelEntity motelEntity) {
+        MotelResponse motelResponse = modelMapper.map(motelEntity, MotelResponse.class);
+        List<FileDTO> filesDTO = new ArrayList<>();
+        List<FileEntity> fileEntities = fileService.findByMotelId(motelEntity.getId());
+        for(FileEntity fileEntity : fileEntities){
+            FileDTO fileDTO = FileDTO
+                    .builder()
+                    .name(fileEntity.getName())
+                    .fileId(fileEntity.getFileId())
+                    .fileUrl(fileEntity.getFileUrl())
+                    .build();
+            filesDTO.add(fileDTO);
+        }
+        motelResponse.setCreateAt(motelEntity.getCreatedAt().toLocalDate());
+        motelResponse.setFilesDTO(filesDTO);
+        motelResponse.setOwner(ownerResponseConverter.toOwnerResponse(motelEntity.getUser()));
+        return motelResponse;
+    }
 }

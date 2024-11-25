@@ -113,4 +113,28 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(id).get();
         return userResponseConverter.toUserResponse(userEntity);
     }
+    @Override
+    public UserEntity updateUserInfo(UserDTO userDTO) {
+        // Tìm kiếm người dùng theo ID từ cơ sở dữ liệu
+        Optional<UserEntity> optionalUser = userRepository.findById(userDTO.getId());
+
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+
+            // Cập nhật các field có trong UserDTO (các field không có trong JSON sẽ giữ nguyên giá trị hiện tại)
+            if (userDTO.getFullName() != null) user.setFullName(userDTO.getFullName());
+            if (userDTO.getEmail() != null) user.setEmail(userDTO.getEmail());
+            if (userDTO.getPhoneNumber() != null) user.setPhoneNumber(userDTO.getPhoneNumber());
+            if (userDTO.getUserName() != null) user.setUserName(userDTO.getUserName());
+            if (userDTO.getAddress() != null) user.setAddress(userDTO.getAddress());
+            if (userDTO.getIdentificationnumber() != null) user.setIdentificationnumber(userDTO.getIdentificationnumber());
+            if (userDTO.getBirthday() != null) user.setBirthday(userDTO.getBirthday());
+            if (userDTO.getGender() != null) user.setGender(userDTO.getGender());
+
+            // Lưu lại các thay đổi
+            return userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found with ID: " + userDTO.getId());
+        }
+    }
 }

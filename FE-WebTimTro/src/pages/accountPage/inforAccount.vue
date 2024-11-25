@@ -50,13 +50,39 @@
               placeholder="Nhập Tên"
             />
           </div>
+
+
           <div class="mb-3">
-            <label class="form-label">Số Điện Thoại</label>
+            <label class="form-label">Giới tính</label>
+            <select v-model="gender" class="form-select">
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác"></option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Ngày sinh</label>
+            <input type="date" v-model="birthdate" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Mã số CCCD</label>
             <input
               type="text"
-              v-model="phoneNumber"
+              v-model="idNumber"
               class="form-control"
-              placeholder="Nhập SĐT"
+              placeholder="Nhập mã số CCCD"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Địa chỉ</label>
+            <input
+              type="text"
+              v-model="address"
+              class="form-control"
+              placeholder="Nhập địa chỉ"
             />
           </div>
 
@@ -65,10 +91,14 @@
       </div>
     </div>
   </div>
+
+
 </template>
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import navbarInforAccount from "@/components/PageComponents/accountPageComponents/navbarInforAccount.vue";
+import axios from "axios";
+
 export default {
   name: "InforAccount",
   components: {
@@ -76,25 +106,72 @@ export default {
   },
   setup() {
     // Define reactive data properties
-    const name = ref("Tuấn Nguyễn Quốc");
-    const gender = ref("Nam");
+    // const name = ref("Tuấn Nguyễn Quốc");
+    // const gender = ref("Nam");
+    // const birthdate = ref("");
+    // const phoneNumber = ref("0388112760");
+    // const idNumber = ref("");
+    // const address = ref("");
+    const name = ref("");
+    const gender = ref("");
     const birthdate = ref("");
-    const phoneNumber = ref("0388112760");
     const idNumber = ref("");
     const address = ref("");
+    const id = ref(""); 
 
-    // Define the method to handle form submission
-    const updateInfo = () => {
-      // Here, you would handle form submission, like sending the data to an API
-      console.log("User Information:", {
-        name: name.value,
-        gender: gender.value,
-        birthdate: birthdate.value,
-        idNumber: idNumber.value,
-        address: address.value,
-      });
-      alert("Cập nhật thông tin thành công!");
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:8081/get-infor", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Assign response data to form fields
+        const userData = response.data;
+        id.value = userData.id;
+        name.value = userData.fullName;
+        // Assuming gender and birthdate are present in the response
+        gender.value = userData.gender || "";
+        birthdate.value = userData.birthday || "";
+        idNumber.value = userData.identificationnumber || "";
+        address.value = userData.address || "";
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
     };
+    const updateInfo = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const updatedData = {
+        id: id.value,
+        fullName: name.value,
+        gender: gender.value,
+        birthday: birthdate.value,
+        identificationnumber: idNumber.value,
+        address: address.value,
+      };
+
+      const response = await axios.put("http://localhost:8081/update-info", updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        alert("Cập nhật thông tin thành công!");
+        // Sau khi cập nhật, bạn có thể gọi lại fetchUserInfo để cập nhật dữ liệu hiển thị
+        fetchUserInfo();
+      }
+    } catch (error) {
+      console.error("Error updating user info:", error);
+      alert("Cập nhật thất bại!");
+    }
+  };
+  onMounted(() => {
+      fetchUserInfo();
+    });
 
     return {
       name,
@@ -104,6 +181,7 @@ export default {
       address,
       updateInfo,
     };
+
   },
   methods: {
     toPostPage() {

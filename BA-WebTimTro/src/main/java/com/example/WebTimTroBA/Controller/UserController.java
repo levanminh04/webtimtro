@@ -42,7 +42,12 @@ public class UserController {
         List<MotelResponse> motelResponses = motelService.findAll();
         return ResponseEntity.ok().body(motelResponses);
     }
-    @GetMapping("/get-info")
+//    @GetMapping("/get-info")
+//    public ResponseEntity<?> getUserDetail(@RequestHeader("Authorization") String authorization) {
+//        String token = authorization.replace("Bearer ", "");
+//        return ResponseEntity.ok(userService.getUserDetail(token));
+//    }
+    @GetMapping("/get-infor")
     public ResponseEntity<?> getUserDetail(@RequestHeader("Authorization") String authorization) {
         String token = authorization.replace("Bearer ", "");
         return ResponseEntity.ok(userService.getUserDetail(token));

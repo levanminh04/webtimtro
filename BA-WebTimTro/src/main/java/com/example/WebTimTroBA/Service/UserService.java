@@ -17,4 +17,6 @@ public interface UserService {
     Optional<UserEntity> findById(Integer id);
     MotelResponse findMotelById(Integer id);
     UserResponse getUserDetail(String token);
+    UserEntity updateUserInfo(UserDTO userDTO);
 }
+

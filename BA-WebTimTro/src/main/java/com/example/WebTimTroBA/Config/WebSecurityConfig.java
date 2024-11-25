@@ -38,6 +38,7 @@ public class WebSecurityConfig {
                             ).permitAll()
                             .requestMatchers(GET, "/admin/**").hasRole("ADMIN")
                             .requestMatchers(GET, "/get-info").hasRole("USER")
+                            .requestMatchers(GET, "/update-info").hasRole("USER")
                             .requestMatchers(POST, "/create").hasRole("USER")
                             .requestMatchers(DELETE, "/delete/**").hasRole("USER")
                             .anyRequest().authenticated();

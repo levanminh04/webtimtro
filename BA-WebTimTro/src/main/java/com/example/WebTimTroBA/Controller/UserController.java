@@ -108,4 +108,14 @@ public class UserController {
         return ResponseEntity.ok().body("Success");
     }
 
+    @PutMapping("/update-info")
+    public ResponseEntity<?> updateUserInfo(@RequestBody UserDTO userDTO, @RequestHeader("Authorization") String authorization) {
+        String token = authorization.replace("Bearer ", "");
+        try {
+            userService.updateUserInfo(userDTO);
+            return ResponseEntity.ok("Cập nhật thông tin thành công");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Cập nhật thông tin thất bại: " + e.getMessage());
+        }
+    }
 }

@@ -1,3 +1,7 @@
+
+
+
+
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light nav-desktop">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -154,21 +158,36 @@ export default {
       this.$router.push("/account/thong-tin-tai-khoan");
     },
     toPostPage() {
-      this.$router.push("/account/dang-tin");
+      this.$router.push("/postMotel");
     },
     async getUserInfo() {
       const token = localStorage.getItem("token");
       if (token) {
         try {
-          const response = await axios.get("http://localhost:8081/get-info", {
+          const response = await axios.get("http://localhost:8081/get-infor", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          this.userInfo = response.data;
+          console.log("User info from API:", response.data);  // Kiểm tra dữ liệu trả về
+          if (response.data && response.data.id) {
+               this.userInfo = response.data;
+          } else {
+                 console.error("User ID is not found in API response");
+          }
+          console.log(this.userInfo);
+
         } catch (error) {
           console.error("Error fetching user info:", error);
-        }
+              console.error("Error fetching user info:", error);
+              if (error.response) {
+                console.error("Response error data:", error.response.data);
+                console.error("Response error status:", error.response.status);
+              } else if (error.request) {
+                console.error("Request error:", error.request);
+              } else {
+                console.error("Unknown error:", error.message);
+              }        }
       }
     },
   },
@@ -192,5 +211,7 @@ export default {
 };
 </script>
 
+
+ 
 
  
